@@ -1,0 +1,1083 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Diseñador de Mezclas ACI 211.1</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f1f5f9;
+      }
+      .card {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      }
+    </style>
+  </head>
+  <body class="p-4 md:p-8">
+    <div class="max-w-6xl mx-auto space-y-6">
+      <!-- ENCABEZADO PRINCIPAL -->
+      <div
+        class="card p-6 border-l-8 border-blue-600 bg-gradient-to-r from-blue-900 to-slate-800 text-white rounded-r-xl"
+      >
+        <h1 class="text-3xl font-bold flex items-center gap-3">
+          <i class="fa-solid fa-cubes-stacked"></i>
+          Diseñador de Mezclas ACI 211.1 / NSR-10
+        </h1>
+        <p class="text-blue-200 text-sm mt-1">
+          Automatización paso a paso por el Método del Volumen Absoluto
+        </p>
+      </div>
+
+      <!-- 0. PANEL INICIAL: ENTRADA DE DATOS -->
+      <div class="card p-6 border-t-4 border-emerald-600 space-y-6">
+        <h2
+          class="text-xl font-bold text-slate-800 flex items-center gap-2 border-b pb-2"
+        >
+          <i class="fa-solid fa-clipboard-list text-emerald-600"></i>
+          Entrada de Datos del Proyecto y Materiales
+        </h2>
+
+        <!-- DATOS CONOCIDOS OPCIONALES (DIRECTOS) -->
+        <div class="bg-amber-50 p-4 rounded-xl border border-amber-200">
+          <h3 class="font-bold text-amber-900 text-xs uppercase mb-2">
+            Valores Opcionales (Si ya los conoce de laboratorio):
+          </h3>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <!-- TMN DIRECTO CON UNIDADES -->
+            <div>
+              <label class="block text-xs font-semibold text-amber-800">
+                TMN Directo Opcional:
+              </label>
+              <div class="flex items-center gap-1">
+                <input
+                  type="number"
+                  id="inp-tmn-opcional"
+                  step="0.1"
+                  placeholder="Ej: 38.1 o 1.5"
+                  class="w-full p-2 border rounded text-xs bg-white font-bold"
+                />
+                <select
+                  id="sel-tmn-unit"
+                  class="p-2 border rounded bg-white text-xs font-bold text-amber-900"
+                >
+                  <option value="mm">mm</option>
+                  <option value="pulg">pulg ("")</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- ASENTAMIENTO DIRECTO -->
+            <div>
+              <label class="block text-xs font-semibold text-amber-800">
+                Asentamiento Directo (mm):
+              </label>
+              <input
+                type="number"
+                id="inp-slump-opcional"
+                placeholder="Ej: 75"
+                class="w-full p-2 border rounded text-xs bg-white font-bold"
+              />
+            </div>
+
+            <!-- MF DIRECTO -->
+            <div>
+              <label class="block text-xs font-semibold text-amber-800">
+                Módulo Finura Arena Directo (MF):
+              </label>
+              <input
+                type="number"
+                id="inp-mf-opcional"
+                step="0.01"
+                placeholder="Ej: 2.60"
+                class="w-full p-2 border rounded text-xs bg-white font-bold"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- RESISTENCIA Y MUESTRAMIENTO -->
+        <div
+          class="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-4"
+        >
+          <h3 class="font-bold text-slate-800 text-xs uppercase border-b pb-1">
+            Resistencia a la Compresión y Ensayos Previos
+          </h3>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">
+                Resistencia Especificada (f'c):
+              </label>
+              <div class="flex items-center gap-1">
+                <input
+                  type="number"
+                  id="inp-fc"
+                  value="280"
+                  class="w-full p-2 border rounded text-right font-bold text-slate-800"
+                />
+                <select
+                  id="sel-fc-unit"
+                  class="p-2 border rounded bg-white text-xs font-semibold"
+                >
+                  <option value="kgcm2">kg/cm²</option>
+                  <option value="MPa">MPa</option>
+                  <option value="PSI">PSI</option>
+                </select>
+              </div>
+            </div>
+            <div class="md:col-span-2">
+              <label class="block text-xs font-bold text-slate-700 mb-1">
+                Cilindros de Ensayos Previos (en MPa, separados por comas para
+                hallar 's'):
+              </label>
+              <input
+                type="text"
+                id="inp-ensayos-fc"
+                placeholder="Ej: 28.1, 29.0, 30.0, 28.5 (Vacíe si no hay datos)"
+                class="w-full p-2 border rounded text-xs bg-white"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- GEOMETRÍA DEL ENCOFRADO Y BARRAS -->
+        <div
+          class="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-3"
+        >
+          <h3 class="font-bold text-slate-800 text-xs uppercase border-b pb-1">
+            Geometría del Encofrado y Refuerzo
+          </h3>
+          <div class="grid grid-cols-2 md:grid-cols-5 gap-3">
+            <div>
+              <label class="block text-[11px] font-semibold">
+                Ancho Viga (b):
+              </label>
+              <div class="flex items-center gap-1">
+                <input
+                  type="number"
+                  id="inp-geom-b"
+                  value="400"
+                  class="w-full p-1.5 border rounded text-right text-xs"
+                />
+                <span class="text-[10px] text-slate-500">mm</span>
+              </div>
+            </div>
+            <div>
+              <label class="block text-[11px] font-semibold">
+                Alto Viga (h):
+              </label>
+              <div class="flex items-center gap-1">
+                <input
+                  type="number"
+                  id="inp-geom-h"
+                  value="600"
+                  class="w-full p-1.5 border rounded text-right text-xs"
+                />
+                <span class="text-[10px] text-slate-500">mm</span>
+              </div>
+            </div>
+            <div>
+              <label class="block text-[11px] font-semibold">
+                Recubrimiento:
+              </label>
+              <div class="flex items-center gap-1">
+                <input
+                  type="number"
+                  id="inp-geom-rec"
+                  value="75"
+                  class="w-full p-1.5 border rounded text-right text-xs"
+                />
+                <span class="text-[10px] text-slate-500">mm</span>
+              </div>
+            </div>
+            <div>
+              <label class="block text-[11px] font-semibold">
+                Estribo / Fleje:
+              </label>
+              <select
+                id="sel-estribo"
+                class="w-full p-1.5 border rounded text-xs bg-white"
+              >
+                <option value="9.52">#3 (3/8" - 9.5 mm)</option>
+                <option value="6.35">#2 (1/4" - 6.4 mm)</option>
+                <option value="12.7">#4 (1/2" - 12.7 mm)</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-[11px] font-semibold">
+                Barras Capa Inferior:
+              </label>
+              <div class="flex items-center gap-1">
+                <input
+                  type="number"
+                  id="inp-n-barras"
+                  value="4"
+                  min="2"
+                  class="w-12 p-1.5 border rounded text-center text-xs font-bold"
+                />
+                <select
+                  id="sel-barras"
+                  class="w-full p-1.5 border rounded text-xs bg-white"
+                >
+                  <option value="15.88">#5 (5/8")</option>
+                  <option value="12.7">#4 (1/2")</option>
+                  <option value="19.05">#6 (3/4")</option>
+                  <option value="22.23">#7 (7/8")</option>
+                  <option value="25.4">#8 (1")</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- AIRE Y CONDICIONES DE EXPOSICIÓN DURABILIDAD -->
+        <div
+          class="bg-slate-50 p-4 rounded-xl border border-slate-200 grid grid-cols-1 md:grid-cols-3 gap-4"
+        >
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">
+              ¿Lleva Aditivo Inclusor de Aire?
+            </label>
+            <select
+              id="sel-aire-in"
+              onchange="toggleAireExp()"
+              class="w-full p-2 border rounded text-xs font-bold bg-white"
+            >
+              <option value="no">No (Aire Atrapado Natural)</option>
+              <option value="si">Sí (Aire Incluido con Aditivo)</option>
+            </select>
+          </div>
+
+          <div id="box-nivel-aire" class="hidden">
+            <label class="block text-xs font-bold text-slate-700 mb-1">
+              Nivel de Exposición (Aire Incluido):
+            </label>
+            <select
+              id="sel-nivel-exp"
+              class="w-full p-2 border rounded text-xs bg-white"
+            >
+              <option value="Mild">Exposición Ligera (Mild)</option>
+              <option value="Moderate">Exposición Moderada (Moderate)</option>
+              <option value="Severe">Exposición Severa (Severe)</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">
+              Exposición por Durabilidad (Tabla 9-1):
+            </label>
+            <select
+              id="sel-exp-durabilidad"
+              class="w-full p-2 border rounded text-xs bg-white"
+            >
+              <option value="F0">F0, S0, P0, C0 - No severa</option>
+              <option value="P1">
+                P1 - Baja permeabilidad en agua (w/c ≤ 0.50)
+              </option>
+              <option value="F1">
+                F1, F2, F3 - Congelamiento/Deshielo (w/c ≤ 0.45)
+              </option>
+              <option value="C2">
+                C2 - Protección corrosión cloruros (w/c ≤ 0.40)
+              </option>
+            </select>
+          </div>
+        </div>
+
+        <!-- CARACTERIZACIÓN CON UNIDADES CLARAS -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <!-- CEMENTO -->
+          <div class="bg-slate-50 p-3 rounded-xl border border-slate-200">
+            <h4 class="font-bold text-xs uppercase border-b pb-1 mb-2">
+              Cemento
+            </h4>
+            <label class="block text-[11px] font-semibold">
+              Masa Específica (Gc):
+            </label>
+            <div class="flex items-center gap-1">
+              <input
+                type="number"
+                id="inp-dr-cemento"
+                value="3.10"
+                step="0.01"
+                class="w-full p-1 border rounded text-right text-xs bg-white"
+              />
+              <span class="text-[10px] font-bold text-slate-500">g/cm³</span>
+            </div>
+          </div>
+
+          <!-- GRAVA -->
+          <div
+            class="bg-slate-50 p-3 rounded-xl border border-slate-200 space-y-1"
+          >
+            <h4 class="font-bold text-xs uppercase border-b pb-1">
+              Grava (Agregado Grueso)
+            </h4>
+            <div class="grid grid-cols-2 gap-2 text-[11px]">
+              <div>
+                <label class="block font-semibold">Dens. Seca:</label>
+                <div class="flex items-center gap-0.5">
+                  <input
+                    type="number"
+                    id="inp-dr-grava"
+                    value="2.44"
+                    step="0.01"
+                    class="w-full p-1 border rounded text-right bg-white"
+                  />
+                  <span class="text-[9px] text-slate-500">g/cm³</span>
+                </div>
+              </div>
+              <div>
+                <label class="block font-semibold">MUA:</label>
+                <div class="flex items-center gap-0.5">
+                  <input
+                    type="number"
+                    id="inp-mua-grava"
+                    value="1750"
+                    class="w-full p-1 border rounded text-right bg-white"
+                  />
+                  <span class="text-[9px] text-slate-500">kg/m³</span>
+                </div>
+              </div>
+              <div>
+                <label class="block font-semibold">Absorción (CA):</label>
+                <div class="flex items-center gap-0.5">
+                  <input
+                    type="number"
+                    id="inp-ca-grava"
+                    value="2.5"
+                    step="0.1"
+                    class="w-full p-1 border rounded text-right bg-white"
+                  />
+                  <span class="text-[9px] text-slate-500">%</span>
+                </div>
+              </div>
+              <div>
+                <label class="block font-semibold">Humedad (CH):</label>
+                <div class="flex items-center gap-0.5">
+                  <input
+                    type="number"
+                    id="inp-ch-grava"
+                    value="4.0"
+                    step="0.1"
+                    class="w-full p-1 border rounded text-right bg-white"
+                  />
+                  <span class="text-[9px] text-slate-500">%</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ARENA -->
+          <div
+            class="bg-slate-50 p-3 rounded-xl border border-slate-200 space-y-1"
+          >
+            <h4 class="font-bold text-xs uppercase border-b pb-1">
+              Arena (Agregado Fino)
+            </h4>
+            <div class="grid grid-cols-2 gap-2 text-[11px]">
+              <div>
+                <label class="block font-semibold">Dens. Seca:</label>
+                <div class="flex items-center gap-0.5">
+                  <input
+                    type="number"
+                    id="inp-dr-arena"
+                    value="2.51"
+                    step="0.01"
+                    class="w-full p-1 border rounded text-right bg-white"
+                  />
+                  <span class="text-[9px] text-slate-500">g/cm³</span>
+                </div>
+              </div>
+              <div>
+                <label class="block font-semibold">MUA:</label>
+                <div class="flex items-center gap-0.5">
+                  <input
+                    type="number"
+                    id="inp-mua-arena"
+                    value="1590"
+                    class="w-full p-1 border rounded text-right bg-white"
+                  />
+                  <span class="text-[9px] text-slate-500">kg/m³</span>
+                </div>
+              </div>
+              <div>
+                <label class="block font-semibold">Absorción (CA):</label>
+                <div class="flex items-center gap-0.5">
+                  <input
+                    type="number"
+                    id="inp-ca-arena"
+                    value="1.3"
+                    step="0.1"
+                    class="w-full p-1 border rounded text-right bg-white"
+                  />
+                  <span class="text-[9px] text-slate-500">%</span>
+                </div>
+              </div>
+              <div>
+                <label class="block font-semibold">Humedad (CH):</label>
+                <div class="flex items-center gap-0.5">
+                  <input
+                    type="number"
+                    id="inp-ch-arena"
+                    value="8.0"
+                    step="0.1"
+                    class="w-full p-1 border rounded text-right bg-white"
+                  />
+                  <span class="text-[9px] text-slate-500">%</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MÓDULO PREVIO: GRANULOMETRÍA NTC-77 (DESPLEGABLE) -->
+      <div class="card p-6 border-t-4 border-amber-500">
+        <div
+          class="flex justify-between items-center cursor-pointer"
+          onclick="toggleGranulometria()"
+        >
+          <div>
+            <h2
+              class="text-xl font-bold text-slate-800 flex items-center gap-2"
+            >
+              <i class="fa-solid fa-vial-circle-check text-amber-500"></i>
+              Módulo Previo: Granulometría de Laboratorio (NTC-77)
+            </h2>
+            <p class="text-xs text-slate-500">
+              Llena esto si no colocaste TMN o MF en la entrada de datos
+              inicial.
+            </p>
+          </div>
+          <button
+            class="bg-amber-100 text-amber-800 px-3 py-1 rounded-lg text-xs font-semibold"
+          >
+            Desplegar / Ocultar
+          </button>
+        </div>
+
+        <div
+          id="sec-granulometria"
+          class="hidden space-y-4 pt-4 mt-4 border-t border-slate-200"
+        >
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="bg-slate-50 p-4 rounded-xl border">
+              <h3 class="font-bold text-xs border-b pb-1 mb-2">
+                Grava (Agregado Grueso) - Retenidos (g)
+              </h3>
+              <table class="w-full text-xs text-left">
+                <tbody id="tbody-grava"></tbody>
+              </table>
+            </div>
+            <div class="bg-slate-50 p-4 rounded-xl border">
+              <h3 class="font-bold text-xs border-b pb-1 mb-2">
+                Arena (Agregado Fino) - Retenidos (g)
+              </h3>
+              <table class="w-full text-xs text-left">
+                <tbody id="tbody-arena"></tbody>
+              </table>
+            </div>
+          </div>
+          <div class="text-right">
+            <button
+              onclick="calcularGranulometria()"
+              class="bg-amber-600 text-white font-bold px-4 py-2 rounded text-xs shadow"
+            >
+              Calcular Granulometría y Extraer Propiedades
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- MÓDULO PREVIO: SELECCIÓN DEL ASENTAMIENTO (DESPLEGABLE) -->
+      <div class="card p-6 border-t-4 border-blue-500">
+        <div
+          class="flex justify-between items-center cursor-pointer"
+          onclick="toggleAsentamiento()"
+        >
+          <div>
+            <h2
+              class="text-xl font-bold text-slate-800 flex items-center gap-2"
+            >
+              <i class="fa-solid fa-ruler-vertical text-blue-500"></i>
+              Módulo Previo: Selección del Asentamiento (Slump)
+            </h2>
+            <p class="text-xs text-slate-500">
+              Llena esto si no ingresaste un valor directo de asentamiento en el
+              panel inicial.
+            </p>
+          </div>
+          <button
+            class="bg-blue-100 text-blue-800 px-3 py-1 rounded-lg text-xs font-semibold"
+          >
+            Desplegar / Ocultar
+          </button>
+        </div>
+
+        <div
+          id="sec-asentamiento"
+          class="hidden space-y-4 pt-4 mt-4 border-t border-slate-200"
+        >
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+            <div>
+              <label class="font-bold block mb-1">
+                Por Tipo de Construcción:
+              </label>
+              <select
+                id="sel-tabla1"
+                onchange="seleccionarTabla1()"
+                class="w-full p-2 border rounded bg-slate-50"
+              >
+                <option value="">-- Seleccionar --</option>
+                <option value="0-20">Prefabricados / Lanzado (0-20 mm)</option>
+                <option value="20-35">Pavimentos vibrados (20-35 mm)</option>
+                <option value="35-50">Pavimentos manuales (35-50 mm)</option>
+                <option value="50-100">Losas, vigas y muros (50-100 mm)</option>
+                <option value="100-150">
+                  Elementos esbeltos / Bombeo (100-150 mm)
+                </option>
+              </select>
+            </div>
+            <div>
+              <label class="font-bold block mb-1">Por Tabla ACI 9-6:</label>
+              <select
+                id="sel-tabla2"
+                onchange="seleccionarTabla2()"
+                class="w-full p-2 border rounded bg-slate-50"
+              >
+                <option value="">-- Seleccionar ACI 9-6 --</option>
+                <option value="25-75">
+                  Zapatas / Cimentaciones (25 - 75 mm)
+                </option>
+                <option value="25-100">
+                  Vigas y muros reinforced (25 - 100 mm)
+                </option>
+                <option value="25-100">
+                  Columnas de edificios (25 - 100 mm)
+                </option>
+              </select>
+            </div>
+            <div>
+              <label class="font-bold block mb-1">Por Consistencia:</label>
+              <select
+                id="sel-tabla3"
+                onchange="seleccionarTabla3()"
+                class="w-full p-2 border rounded bg-slate-50"
+              >
+                <option value="">-- Seleccionar --</option>
+                <option value="0-50">Seca (0 - 50 mm)</option>
+                <option value="75-100">Plástica / Media (75 - 100 mm)</option>
+                <option value="125-175">Fluida (≥ 125 mm)</option>
+              </select>
+            </div>
+          </div>
+          <div
+            class="p-3 bg-blue-50 rounded-lg flex justify-between items-center"
+          >
+            <span class="text-xs font-bold text-blue-900">
+              Slump Adoptado (Punto medio del rango):
+            </span>
+            <div class="flex items-center gap-1">
+              <input
+                type="number"
+                id="inp-asentamiento"
+                value="75"
+                class="w-20 p-1 text-center font-bold border-2 border-blue-600 rounded bg-white text-blue-900"
+              />
+              <span class="text-xs font-bold text-blue-900">mm</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- BOTÓN DE CÁLCULO COMPLETO -->
+      <div class="text-center py-4">
+        <button
+          onclick="ejecutarDisenoCompletoACI()"
+          class="bg-blue-600 hover:bg-blue-700 text-white font-extrabold px-8 py-4 rounded-xl text-lg shadow-lg flex items-center gap-3 mx-auto"
+        >
+          <i class="fa-solid fa-calculator"></i>
+          CALCULAR DISEÑO DE MEZCLA ACI 211.1
+        </button>
+      </div>
+
+      <!-- ÁREA DE RESULTADOS COMPLETOS PASO A PASO -->
+      <div id="panel-resultados" class="hidden space-y-6">
+        <!-- DESGLOSE DE CÁLCULOS PASO 2 AL 9 -->
+        <div class="card p-6 border-l-4 border-indigo-500 space-y-4">
+          <h2 class="text-xl font-bold text-slate-800 border-b pb-2">
+            Memoria de Cálculo Paso a Paso
+          </h2>
+          <div id="log-pasos" class="space-y-3 text-xs text-slate-700"></div>
+        </div>
+
+        <!-- TABLAS DE RESULTADOS FINALES -->
+        <div class="card p-6 border-l-4 border-emerald-500 space-y-6">
+          <h2 class="text-xl font-bold text-slate-800 flex items-center gap-2">
+            <i class="fa-solid fa-table text-emerald-600"></i>
+            Tablas Resumen de Dosificación de Materiales
+          </h2>
+
+          <!-- TABLA 1: VOLÚMENES ABSOLUTOS Y PESOS SECOS -->
+          <div>
+            <h3 class="font-bold text-xs uppercase text-slate-700 mb-2">
+              Tabla 1: Dosificación en Estado Seco y Volúmenes Absolutos (por 1
+              m³)
+            </h3>
+            <div class="overflow-x-auto">
+              <table
+                class="w-full text-xs text-left border-collapse border border-slate-200"
+              >
+                <thead class="bg-slate-100 font-bold text-slate-700 border-b">
+                  <tr>
+                    <th class="p-2 border">Material</th>
+                    <th class="p-2 border text-right">Masa Seca (kg)</th>
+                    <th class="p-2 border text-right">
+                      Masa Específica (g/cm³)
+                    </th>
+                    <th class="p-2 border text-right">Volumen Absoluto (m³)</th>
+                    <th class="p-2 border text-right">Volumen (Litros)</th>
+                  </tr>
+                </thead>
+                <tbody id="tbody-res-seco"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- TABLA 2: PESOS HÚMEDOS Y CORRECCIÓN DE AGUA -->
+          <div>
+            <h3 class="font-bold text-xs uppercase text-slate-700 mb-2">
+              Tabla 2: Dosificación Corregida por Humedad de Campo (por 1 m³)
+            </h3>
+            <div class="overflow-x-auto">
+              <table
+                class="w-full text-xs text-left border-collapse border border-slate-200"
+              >
+                <thead
+                  class="bg-emerald-100 font-bold text-emerald-900 border-b"
+                >
+                  <tr>
+                    <th class="p-2 border">Material</th>
+                    <th class="p-2 border text-right">Masa Seca (kg)</th>
+                    <th class="p-2 border text-right">Ajuste Humedad (kg)</th>
+                    <th class="p-2 border text-right">
+                      Masa Húmeda / Real (kg)
+                    </th>
+                  </tr>
+                </thead>
+                <tbody id="tbody-res-humedo"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const tamicesGrava = [
+        { pulg: '2"', mm: 50.8, id: "g_50" },
+        { pulg: '1 1/2"', mm: 38.1, id: "g_38" },
+        { pulg: '1"', mm: 25.4, id: "g_25" },
+        { pulg: '3/4"', mm: 19.0, id: "g_19" },
+        { pulg: '1/2"', mm: 12.7, id: "g_12" },
+        { pulg: '3/8"', mm: 9.5, id: "g_9" },
+        { pulg: "#4", mm: 4.76, id: "g_4" },
+        { pulg: "Fondo", mm: 0, id: "g_fondo" }
+      ];
+
+      const tamicesArena = [
+        { pulg: '3/8"', mm: 9.5, id: "a_9" },
+        { pulg: "#4", mm: 4.76, id: "a_4" },
+        { pulg: "#8", mm: 2.38, id: "a_8" },
+        { pulg: "#16", mm: 1.19, id: "a_16" },
+        { pulg: "#30", mm: 0.595, id: "a_30" },
+        { pulg: "#50", mm: 0.297, id: "a_50" },
+        { pulg: "#100", mm: 0.149, id: "a_100" },
+        { pulg: "Fondo", mm: 0, id: "a_fondo" }
+      ];
+
+      // TABLA 9-3 ACI 211.1 (RESISTENCIA VS W/C)
+      const tabla9_3 = [
+        { fc: 45, noAire: 0.38, conAire: 0.3 },
+        { fc: 40, noAire: 0.42, conAire: 0.34 },
+        { fc: 35, noAire: 0.47, conAire: 0.39 },
+        { fc: 30, noAire: 0.54, conAire: 0.45 },
+        { fc: 25, noAire: 0.61, conAire: 0.52 },
+        { fc: 20, noAire: 0.69, conAire: 0.6 },
+        { fc: 15, noAire: 0.79, conAire: 0.7 }
+      ];
+
+      // TABLA ACI 6.3.6 / TABLA 11.15 (VOLUMEN DE GRAVA POR UNIDAD DE VOLUMEN CONCRETO b/b0)
+      const tablaACI_b_b0 = [
+        { tmn: 9.51, mf24: 0.5, mf26: 0.48, mf28: 0.46, mf30: 0.44 },
+        { tmn: 12.7, mf24: 0.59, mf26: 0.57, mf28: 0.55, mf30: 0.53 },
+        { tmn: 19.0, mf24: 0.66, mf26: 0.64, mf28: 0.62, mf30: 0.6 },
+        { tmn: 25.4, mf24: 0.71, mf26: 0.69, mf28: 0.67, mf30: 0.65 },
+        { tmn: 38.1, mf24: 0.75, mf26: 0.73, mf28: 0.71, mf30: 0.69 },
+        { tmn: 50.8, mf24: 0.78, mf26: 0.76, mf28: 0.74, mf30: 0.72 },
+        { tmn: 76.1, mf24: 0.82, mf26: 0.8, mf28: 0.78, mf30: 0.76 },
+        { tmn: 152.0, mf24: 0.87, mf26: 0.85, mf28: 0.83, mf30: 0.81 }
+      ];
+
+      // FUNCIÓN DE INTERPOLACIÓN W/C (TABLA 9-3)
+      function interpolarWC(fcrMPa, conAire) {
+        const col = conAire ? "conAire" : "noAire";
+        if (fcrMPa >= tabla9_3[0].fc) return tabla9_3[0][col];
+        if (fcrMPa <= tabla9_3[tabla9_3.length - 1].fc)
+          return tabla9_3[tabla9_3.length - 1][col];
+
+        for (let i = 0; i < tabla9_3.length - 1; i++) {
+          let pSuperior = tabla9_3[i];
+          let pInferior = tabla9_3[i + 1];
+
+          if (fcrMPa <= pSuperior.fc && fcrMPa >= pInferior.fc) {
+            let y = fcrMPa,
+              y1 = pInferior.fc,
+              y2 = pSuperior.fc;
+            let x1 = pInferior[col],
+              x2 = pSuperior[col];
+            return x1 + ((y - y1) / (y2 - y1)) * (x2 - x1);
+          }
+        }
+        return 0.45;
+      }
+
+      // FUNCIÓN DE BÚSQUEDA/INTERPOLACIÓN DE B/B0 (TABLA 6.3.6)
+      function obtenerFactor_b_b0(tmnMM, mfArena) {
+        // 1. Encontrar la fila de TMN más cercana o exacta
+        let filaTMN = tablaACI_b_b0.find((f) => Math.abs(f.tmn - tmnMM) < 2.0);
+        if (!filaTMN) {
+          // Buscar por rango si no es un TMN exacto
+          filaTMN = tablaACI_b_b0.reduce((prev, curr) =>
+            Math.abs(curr.tmn - tmnMM) < Math.abs(prev.tmn - tmnMM)
+              ? curr
+              : prev
+          );
+        }
+
+        // 2. Interpolación según Módulo de Finura (MF)
+        let mfs = [2.4, 2.6, 2.8, 3.0];
+        let vals = [filaTMN.mf24, filaTMN.mf26, filaTMN.mf28, filaTMN.mf30];
+
+        if (mfArena <= 2.4) return filaTMN.mf24;
+        if (mfArena >= 3.0) return filaTMN.mf30;
+
+        for (let i = 0; i < mfs.length - 1; i++) {
+          if (mfArena >= mfs[i] && mfArena <= mfs[i + 1]) {
+            let x = mfArena,
+              x1 = mfs[i],
+              x2 = mfs[i + 1];
+            let y1 = vals[i],
+              y2 = vals[i + 1];
+            return y1 + ((x - x1) / (x2 - x1)) * (y2 - y1);
+          }
+        }
+        return filaTMN.mf26;
+      }
+
+      let granTMN = null,
+        granMF = null;
+
+      function initTablasGranulometria() {
+        document.getElementById("tbody-grava").innerHTML = tamicesGrava
+          .map(
+            (t) => `
+        <tr class="border-b">
+          <td class="py-1 font-semibold">${t.pulg} (${t.mm || "-"} mm)</td>
+          <td><input type="number" id="${t.id}" value="0" class="w-20 p-1 border rounded text-right bg-white"></td>
+        </tr>`
+          )
+          .join("");
+        document.getElementById("tbody-arena").innerHTML = tamicesArena
+          .map(
+            (t) => `
+        <tr class="border-b">
+          <td class="py-1 font-semibold">${t.pulg} (${t.mm || "-"} mm)</td>
+          <td><input type="number" id="${t.id}" value="0" class="w-20 p-1 border rounded text-right bg-white"></td>
+        </tr>`
+          )
+          .join("");
+      }
+
+      function toggleGranulometria() {
+        document.getElementById("sec-granulometria").classList.toggle("hidden");
+      }
+      function toggleAsentamiento() {
+        document.getElementById("sec-asentamiento").classList.toggle("hidden");
+      }
+
+      function toggleAireExp() {
+        const lleva = document.getElementById("sel-aire-in").value === "si";
+        document
+          .getElementById("box-nivel-aire")
+          .classList.toggle("hidden", !lleva);
+      }
+
+      function calcularGranulometria() {
+        let rG = tamicesGrava.map((t) => ({
+          ...t,
+          peso: parseFloat(document.getElementById(t.id).value) || 0
+        }));
+        let totG = rG.reduce((a, b) => a + b.peso, 0);
+        if (totG > 0) {
+          let acu = 0;
+          rG.forEach((t) => {
+            acu += (t.peso / totG) * 100;
+            t.pctAcu = acu;
+          });
+          let tmnObj = rG.find((t) => t.pctAcu > 0.1) || rG[1];
+          granTMN = tmnObj.mm || 38.1;
+        }
+        let rA = tamicesArena.map((t) => ({
+          ...t,
+          peso: parseFloat(document.getElementById(t.id).value) || 0
+        }));
+        let totA = rA.reduce((a, b) => a + b.peso, 0);
+        if (totA > 0) {
+          let acu = 0,
+            sumaMF = 0;
+          rA.forEach((t) => {
+            acu += (t.peso / totA) * 100;
+            if (["#4", "#8", "#16", "#30", "#50", "#100"].includes(t.pulg))
+              sumaMF += acu;
+          });
+          granMF = sumaMF / 100;
+        }
+        alert(
+          `Granulometría procesada: TMN = ${granTMN} mm | MF Arena = ${granMF ? granMF.toFixed(2) : "-"}`
+        );
+      }
+
+      function seleccionarTabla1() {
+        asignarPromedio(document.getElementById("sel-tabla1").value);
+      }
+      function seleccionarTabla2() {
+        asignarPromedio(document.getElementById("sel-tabla2").value);
+      }
+      function seleccionarTabla3() {
+        asignarPromedio(document.getElementById("sel-tabla3").value);
+      }
+      function asignarPromedio(str) {
+        if (!str) return;
+        const p = str.split("-").map(Number);
+        if (p.length === 2)
+          document.getElementById("inp-asentamiento").value = Math.round(
+            (p[0] + p[1]) / 2
+          );
+      }
+
+      // MOTOR PRINCIPAL DE DISEÑO ACI
+      function ejecutarDisenoCompletoACI() {
+        let logHtml = "";
+
+        // 1. EVALUACIÓN DE TMN Y MF
+        let rawTmnDirecto = document.getElementById("inp-tmn-opcional").value;
+        let unitTmn = document.getElementById("sel-tmn-unit").value;
+        let tmnFinal = null;
+
+        if (rawTmnDirecto !== "") {
+          let val = parseFloat(rawTmnDirecto);
+          tmnFinal = unitTmn === "pulg" ? val * 25.4 : val;
+        } else if (granTMN !== null) {
+          tmnFinal = granTMN;
+        } else {
+          document
+            .getElementById("sec-granulometria")
+            .classList.remove("hidden");
+          alert(
+            "Por favor ingrese el TMN directo en el panel inicial o llene el Módulo Previo de Granulometría."
+          );
+          return;
+        }
+
+        let rawMfDirecto = document.getElementById("inp-mf-opcional").value;
+        let mfFinal = rawMfDirecto !== "" ? parseFloat(rawMfDirecto) : granMF;
+        if (mfFinal === null) {
+          document
+            .getElementById("sec-granulometria")
+            .classList.remove("hidden");
+          alert(
+            "Por favor ingrese el Módulo de Finura (MF) en la entrada de datos o llene la tabla de la arena."
+          );
+          return;
+        }
+
+        // 2. EVALUACIÓN DE ASENTAMIENTO
+        let rawSlumpDirecto =
+          document.getElementById("inp-slump-opcional").value;
+        let slumpFinal =
+          rawSlumpDirecto !== ""
+            ? parseFloat(rawSlumpDirecto)
+            : parseFloat(document.getElementById("inp-asentamiento").value) ||
+              75;
+
+        // 3. DATOS DE RESISTENCIA Y GEOMETRÍA
+        let fc = parseFloat(document.getElementById("inp-fc").value) || 280;
+        let unitFc = document.getElementById("sel-fc-unit").value;
+        let fcMPa = fc;
+        if (unitFc === "kgcm2") fcMPa = fc / 10.197;
+        if (unitFc === "PSI") fcMPa = fc / 145.038;
+
+        let b = parseFloat(document.getElementById("inp-geom-b").value) || 400;
+        let rec =
+          parseFloat(document.getElementById("inp-geom-rec").value) || 75;
+        let dEstribo =
+          parseFloat(document.getElementById("sel-estribo").value) || 9.52;
+        let nBarras =
+          parseInt(document.getElementById("inp-n-barras").value) || 4;
+        let dBbarra =
+          parseFloat(document.getElementById("sel-barras").value) || 15.88;
+
+        // PASO 1 & 2
+        let s_espacio =
+          (b - 2 * rec - 2 * dEstribo - nBarras * dBbarra) / (nBarras - 1);
+        let lim1_b = b / 5;
+        let lim3_s = (3 / 4) * s_espacio;
+
+        logHtml += `<p><b>Paso 1 (Asentamiento Adoptado):</b> <b>${slumpFinal} mm</b></p>`;
+        logHtml += `<p><b>Paso 2 (TMN y Verificación Geometría):</b> Espacio libre e/ barras (s) = <b>${s_espacio.toFixed(1)} mm</b>.</p>`;
+        logHtml += `<p class="pl-4 text-slate-500">• Límite 1/5 del ancho (b/5): ${lim1_b.toFixed(1)} mm | Límite 3/4 espaciamiento (3/4·s): ${lim3_s.toFixed(1)} mm.</p>`;
+        logHtml += `<p class="pl-4 text-emerald-700 font-bold">• TMN Adoptado: ${tmnFinal.toFixed(1)} mm (${tmnFinal <= Math.min(lim1_b, lim3_s) ? "CUMPLE LIMITACIONES" : "Revisar limitaciones de encofrado"})</p>`;
+
+        // PASO 3 & 4
+        let conAire = document.getElementById("sel-aire-in").value === "si";
+        let expAire = document.getElementById("sel-nivel-exp").value;
+        let aguaBase = conAire ? 165 : 181;
+        let pctAire = conAire
+          ? expAire === "Mild"
+            ? 2.5
+            : expAire === "Moderate"
+              ? 4.5
+              : 5.5
+          : 1.0;
+
+        logHtml += `<p><b>Paso 3 (Aire):</b> ${conAire ? "Aire Incluido (" + expAire + ")" : "Aire Atrapado"} = <b>${pctAire}%</b></p>`;
+        logHtml += `<p><b>Paso 4 (Agua de Mezclado):</b> <b>${aguaBase} kg/m³</b> (según Slump ${slumpFinal}mm y TMN ${tmnFinal.toFixed(1)}mm)</p>`;
+
+        // PASO 5: f'cr
+        let txtEnsayos = document.getElementById("inp-ensayos-fc").value.trim();
+        let fcrMPa = fcMPa;
+        if (txtEnsayos !== "") {
+          let arr = txtEnsayos
+            .split(",")
+            .map(Number)
+            .filter((n) => !isNaN(n));
+          let n = arr.length;
+          let prom = arr.reduce((a, b) => a + b, 0) / n;
+          let desv = Math.sqrt(
+            arr.reduce((a, b) => a + Math.pow(b - prom, 2), 0) / (n - 1)
+          );
+          let fcr1 = fcMPa + 1.34 * desv;
+          let fcr2 =
+            fcMPa <= 35 ? fcMPa + 2.33 * desv - 3.5 : 0.9 * fcMPa + 2.33 * desv;
+          fcrMPa = Math.max(fcr1, fcr2);
+          logHtml += `<p><b>Paso 5 (Resistencia f'cr):</b> Con ${n} cilindros en MPa (s = ${desv.toFixed(2)} MPa) &rarr; f'cr = <b>${(fcrMPa * 10.197).toFixed(1)} kg/cm²</b> (${fcrMPa.toFixed(1)} MPa)</p>`;
+        } else {
+          let marg =
+            fcMPa < 21 ? 7.0 : fcMPa <= 35 ? 8.3 : 1.1 * fcMPa + 5.0 - fcMPa;
+          fcrMPa = fcMPa + marg;
+          logHtml += `<p><b>Paso 5 (Resistencia f'cr):</b> Sin varianza (Margen normativo) &rarr; f'cr = <b>${(fcrMPa * 10.197).toFixed(1)} kg/cm²</b> (${fcrMPa.toFixed(1)} MPa)</p>`;
+        }
+
+        // PASO 6: RELACIÓN W/C
+        let wcResistencia = interpolarWC(fcrMPa, conAire);
+        let expDur = document.getElementById("sel-exp-durabilidad").value;
+        let wcDurabilidad =
+          expDur === "P1"
+            ? 0.5
+            : expDur === "F1"
+              ? 0.45
+              : expDur === "C2"
+                ? 0.4
+                : 1.0;
+        let wcDefinitivo = Math.min(wcResistencia, wcDurabilidad);
+
+        logHtml += `<p><b>Paso 6 (Relación w/c):</b> w/c por Resistencia (Tabla 9-3 interpolada) = <b>${wcResistencia.toFixed(3)}</b> | w/c por Durabilidad máx = ${wcDurabilidad} &rarr; <b>w/c adoptado = ${wcDefinitivo.toFixed(3)}</b></p>`;
+
+        // PASO 7: CEMENTO
+        let wCemento = aguaBase / wcDefinitivo;
+        let drCemento =
+          parseFloat(document.getElementById("inp-dr-cemento").value) || 3.1;
+        let vCemento = wCemento / (drCemento * 1000);
+        logHtml += `<p><b>Paso 7 (Cemento):</b> Wc = ${aguaBase} / ${wcDefinitivo.toFixed(3)} = <b>${wCemento.toFixed(2)} kg/m³</b> | Vol. Cemento = <b>${vCemento.toFixed(3)} m³</b></p>`;
+
+        // PASO 8: AGREGADOS SECOS (BÚSQUEDA DINÁMICA DE B/B0 SEGÚN MATRIZ ACI)
+        let drGrava =
+          parseFloat(document.getElementById("inp-dr-grava").value) || 2.44;
+        let muaGrava =
+          parseFloat(document.getElementById("inp-mua-grava").value) || 1750;
+
+        let b_b0 = obtenerFactor_b_b0(tmnFinal, mfFinal); // Obtenido de la tabla ACI
+        let wGravaSeca = b_b0 * muaGrava;
+        let vGrava = wGravaSeca / (drGrava * 1000);
+
+        let vAgua = aguaBase / 1000.0;
+        let vAire = pctAire / 100.0;
+        let vArena = 1.0 - (vCemento + vAgua + vGrava + vAire);
+        let drArena =
+          parseFloat(document.getElementById("inp-dr-arena").value) || 2.51;
+        let wArenaSeca = vArena * (drArena * 1000);
+
+        logHtml += `<p><b>Paso 8 (Agregados Secos):</b> Factor b/b0 ACI (TMN=${tmnFinal.toFixed(1)}mm, MF=${mfFinal.toFixed(2)}) = <b>${b_b0.toFixed(2)}</b> &rarr; Grava Seca = <b>${wGravaSeca.toFixed(2)} kg/m³</b> (Vol: ${vGrava.toFixed(3)} m³)</p>`;
+        logHtml += `<p class="pl-4">• Arena por Vol. Absoluto: Vol. Arena = <b>${vArena.toFixed(3)} m³</b> &rarr; Arena Seca = <b>${wArenaSeca.toFixed(2)} kg/m³</b></p>`;
+
+        // PASO 9: CORRECCIÓN POR HUMEDAD
+        let caG =
+          parseFloat(document.getElementById("inp-ca-grava").value) || 0;
+        let chG =
+          parseFloat(document.getElementById("inp-ch-grava").value) || 0;
+        let caA =
+          parseFloat(document.getElementById("inp-ca-arena").value) || 0;
+        let chA =
+          parseFloat(document.getElementById("inp-ch-arena").value) || 0;
+
+        let corrAguaG = (wGravaSeca * (chG - caG)) / 100.0;
+        let corrAguaA = (wArenaSeca * (chA - caA)) / 100.0;
+        let aguaCorregida = aguaBase - corrAguaG - corrAguaA;
+
+        let wGravaHumeda = wGravaSeca * (1 + chG / 100.0);
+        let wArenaHumeda = wArenaSeca * (1 + chA / 100.0);
+
+        logHtml += `<p><b>Paso 9 (Ajuste por Humedad):</b> Agua corregida de mezclado = <b>${aguaCorregida.toFixed(2)} kg/m³</b></p>`;
+
+        document.getElementById("log-pasos").innerHTML = logHtml;
+
+        // TABLA 1 (SECO)
+        document.getElementById("tbody-res-seco").innerHTML = `
+        <tr class="border-b"><td class="p-2 font-bold">Cemento</td><td class="p-2 text-right font-semibold">${wCemento.toFixed(2)}</td><td class="p-2 text-right">${drCemento.toFixed(2)}</td><td class="p-2 text-right font-bold text-blue-700">${vCemento.toFixed(3)}</td><td class="p-2 text-right">${(vCemento * 1000).toFixed(1)}</td></tr>
+        <tr class="border-b"><td class="p-2 font-bold">Agregado Grueso (Grava)</td><td class="p-2 text-right font-semibold">${wGravaSeca.toFixed(2)}</td><td class="p-2 text-right">${drGrava.toFixed(2)}</td><td class="p-2 text-right font-bold text-blue-700">${vGrava.toFixed(3)}</td><td class="p-2 text-right">${(vGrava * 1000).toFixed(1)}</td></tr>
+        <tr class="border-b"><td class="p-2 font-bold">Agregado Fino (Arena)</td><td class="p-2 text-right font-semibold">${wArenaSeca.toFixed(2)}</td><td class="p-2 text-right">${drArena.toFixed(2)}</td><td class="p-2 text-right font-bold text-blue-700">${vArena.toFixed(3)}</td><td class="p-2 text-right">${(vArena * 1000).toFixed(1)}</td></tr>
+        <tr class="border-b"><td class="p-2 font-bold">Agua de Mezclado</td><td class="p-2 text-right font-semibold">${aguaBase.toFixed(2)}</td><td class="p-2 text-right">1.00</td><td class="p-2 text-right font-bold text-blue-700">${vAgua.toFixed(3)}</td><td class="p-2 text-right">${(vAgua * 1000).toFixed(1)}</td></tr>
+        <tr class="border-b bg-slate-50"><td class="p-2 font-bold">Aire (${pctAire}%)</td><td class="p-2 text-right">-</td><td class="p-2 text-right">-</td><td class="p-2 text-right font-bold text-blue-700">${vAire.toFixed(3)}</td><td class="p-2 text-right">${(vAire * 1000).toFixed(1)}</td></tr>
+        <tr class="bg-blue-100 font-extrabold text-blue-900 border-t-2"><td class="p-2">TOTAL 1 m³</td><td class="p-2 text-right">${(wCemento + wGravaSeca + wArenaSeca + aguaBase).toFixed(2)} kg</td><td class="p-2 text-right">-</td><td class="p-2 text-right text-base">${(vCemento + vGrava + vArena + vAgua + vAire).toFixed(3)} m³</td><td class="p-2 text-right text-base">1000.0 L</td></tr>
+      `;
+
+        // TABLA 2 (HÚMEDO)
+        document.getElementById("tbody-res-humedo").innerHTML = `
+        <tr class="border-b"><td class="p-2 font-bold">Cemento</td><td class="p-2 text-right">${wCemento.toFixed(2)}</td><td class="p-2 text-right font-semibold text-slate-500">0.00</td><td class="p-2 text-right font-bold text-emerald-800">${wCemento.toFixed(2)}</td></tr>
+        <tr class="border-b"><td class="p-2 font-bold">Agregado Grueso Húmedo (Grava)</td><td class="p-2 text-right">${wGravaSeca.toFixed(2)}</td><td class="p-2 text-right font-semibold ${corrAguaG >= 0 ? "text-blue-600" : "text-amber-600"}">${corrAguaG.toFixed(2)}</td><td class="p-2 text-right font-bold text-emerald-800">${wGravaHumeda.toFixed(2)}</td></tr>
+        <tr class="border-b"><td class="p-2 font-bold">Agregado Fino Húmedo (Arena)</td><td class="p-2 text-right">${wArenaSeca.toFixed(2)}</td><td class="p-2 text-right font-semibold ${corrAguaA >= 0 ? "text-blue-600" : "text-amber-600"}">${corrAguaA.toFixed(2)}</td><td class="p-2 text-right font-bold text-emerald-800">${wArenaHumeda.toFixed(2)}</td></tr>
+        <tr class="border-b"><td class="p-2 font-bold">Agua de Mezclado Real a Añadir</td><td class="p-2 text-right">${aguaBase.toFixed(2)}</td><td class="p-2 text-right font-semibold text-rose-600">${(-(corrAguaG + corrAguaA)).toFixed(2)}</td><td class="p-2 text-right font-bold text-emerald-800">${aguaCorregida.toFixed(2)}</td></tr>
+        <tr class="bg-emerald-200 font-extrabold text-emerald-950 border-t-2"><td class="p-2">TOTAL DOSIFICACIÓN REAL DE CAMPO</td><td class="p-2 text-right">${(wCemento + wGravaSeca + wArenaSeca + aguaBase).toFixed(2)} kg</td><td class="p-2 text-right">0.00 kg</td><td class="p-2 text-right text-base">${(wCemento + wGravaHumeda + wArenaHumeda + aguaCorregida).toFixed(2)} kg/m³</td></tr>
+      `;
+
+        document.getElementById("panel-resultados").classList.remove("hidden");
+        document
+          .getElementById("panel-resultados")
+          .scrollIntoView({ behavior: "smooth" });
+      }
+
+      window.onload = function () {
+        initTablasGranulometria();
+      };
+    </script>
+  </body>
+</html>
